@@ -23,8 +23,8 @@ foreign import getUUID """
 type Query p    = { "type" :: String
                   , params :: p }
 
-type Envelope p = { id     :: UUID
-                  , query  :: Query p }
+newtype Envelope p = Envelope { id     :: UUID
+                              , query  :: Query p }
 
 type StatQuery = Query { name      :: String
                        , startDate :: Epoch 
@@ -38,11 +38,14 @@ emitEnvelope = join $ f <$> getUUID <*> getSocket
 
 type RQ e = EE (on :: On | e)
 
-runStatQuery :: forall a r e. StatQuery -> (Response r -> RQ e a) -> RQ e Unit
-runStatQuery q fn = let e = "StatQuery"
-  in getUUID >>= \uuid -> getSocket >>= emit e {id : uuid, query : q} >>= on e fn
+runStatQuery :: forall a r e. Envelope StatQuery -> (Response r -> RQ e a) -> RQ e Socket
+runStatQuery (Envelope env) fn = let e = "StatQuery"
+  in getUUID >>= \uuid -> getSocket >>= emit e env{id = uuid} >>= on e fn
 
 
 class Request a where 
-  send :: forall a b r e. a -> (Response r -> RQ e b) -> RQ e Unit
+  send :: forall a b r e. a -> (Response r -> RQ e b) -> RQ e Socket
+
+-- instance requestEnvelope :: Request Envelope p where
+--   send (Envelope p) = runStatQuery (Envelope p)
 

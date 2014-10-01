@@ -29,13 +29,16 @@ foreign import getSocketSinglton """
 
 data Response d = Response d
 
+(<:>) :: forall a b e. (Eff e a) -> b -> Eff e b
+(<:>) f x = f >>= \_ -> return x
+
 emit :: forall d e. String -> d -> Socket -> Eff (emit :: Emit | e) Socket
-emit s d so = method2Eff "emit" so s d
+emit s d so = method2Eff "emit" so s d <:> so 
 
-on :: forall a b e. String -> (Response a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Unit
-on s f so = method2Eff "on" so s f
+on :: forall a b e. String -> (Response a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
+on s f so = method2Eff "on" so s f <:> so
 
-onCont :: forall a e. Socket -> String -> ContT Unit (Eff (on :: On | e)) (Response a)
+onCont :: forall a e. Socket -> String -> ContT Socket (Eff (on :: On | e)) (Response a)
 onCont so s = cont so s # ContT
   where cont so s fn = on s fn so 
 
