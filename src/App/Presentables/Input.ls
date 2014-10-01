@@ -1,0 +1,2 @@
+@InputLinker = (p, a) -> true
+
