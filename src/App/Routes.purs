@@ -3,6 +3,7 @@ module App.Routes where
 import Presentable.Router
 import Presentable.ViewParser
 import Data.Tuple
+import Data.Maybe
 import App.Presentables
 
 foreign import yaml "window.yaml = window.yaml || {};" :: 
@@ -13,5 +14,5 @@ foreign import yaml "window.yaml = window.yaml || {};" ::
 rs = [ (Tuple {url:"/index", title:"home", "data":{}} yaml.index) ]
 
 init = do
-  route rs $ flip renderYaml $ registerPresentables
+  route rs $ renderYaml Nothing $ registerPresentables
   initRoutes

@@ -14,7 +14,7 @@
     "purescript-arrays": "*",
     "purescript-maybe": "*",
     "purescript-tuples": "~0.1.2",
-    "purescript-maps": "~0.0.4",
+    "purescript-maps": "~0.0.5",
     "purescript-events": "~0.0.3",
     "purescript-timers": "~0.0.5",
     "purescript-history": "~0.0.2",
@@ -25,7 +25,8 @@
     "socket.io-client": "~1.1.0",
     "purescript-oo-ffi": "~0.0.1",
     "purescript-transformers": "~0.2.1",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "purescript-reactive": "*"
   },
   "devDependencies": {
     "purescript-quickcheck": "~0.1.3",
