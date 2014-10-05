@@ -7,20 +7,14 @@ import Data.Maybe
 import Control.Monad.Trans
 import Control.Monad.Eff
 
--- foreign import linker "" :: forall a p e. String -> Linker a p e 
-
 foreign import linkerImpl """
-  function linkerImpl(linkerName){
-    return function(p){
-      return function(a){
-        return window[linkerName](p, a);
-      };
-    };
+  function linkerImpl(Nothing, Just, linkerName, mp, ma){
+    return _returnEff(_maybe(window[linkerName](_unMaybe(mp), _unMaybe(ma))));
   } 
-  """ :: forall x a p e. Maybe x -> (x -> Maybe x) -> String -> p -> a -> Maybe p
+  """ :: forall a p e. Fn5 (Maybe p) (p -> Maybe p) String (Maybe p) (Maybe a) (Eff e (Maybe p))
 
 linker :: forall a p e. String -> Linker a p e
-linker s (Just p) (Just a) = return $ linkerImpl Nothing Just s p a
+linker = runFn5 linkerImpl Nothing Just
 
 registerPresentables = register "Input" (linker "InputLinker" :: forall p e. Linker (foo :: String) p e)
                      $ emptyRegistery
