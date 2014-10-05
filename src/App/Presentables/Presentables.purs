@@ -11,7 +11,7 @@ import Control.Monad.Eff.Exception
 import Control.Reactive
 
 import App.Presentables.Foreign
-import App.Presentables.ChartSelector
+import App.Presentables.Linkers.ChartSelector
 import App.Controller
 
 registerPresentables = emptyRegistery
