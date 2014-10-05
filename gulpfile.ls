@@ -9,6 +9,7 @@ require! <[
   gulp-rename
   gulp-purescript 
   gulp-livescript
+  gulp-filter
   gulp-file-include
 ]>
 
@@ -20,8 +21,8 @@ paths =
       bower_components/purescript-*/src/**/*.purs
       bower_components/purescript-*/src/**/*.purs.hs
       presentable/src/**/*.purs
-      src/**/*.purs
       src/**/*.ls      
+      src/**/*.purs
     ]>
     dest: "public/js"
 
@@ -34,9 +35,7 @@ paths =
       bower_components/purescript-*/src/**/*.purs.hs
       presentable/src/**/*.purs
       src/**/*.ls
-      src/*/**/*.purs
-      tests/**/*.ls
-      tests/**/*.purs
+      src/**/*.purs
     ]>
     dest: "tmp"
 
@@ -48,7 +47,6 @@ options =
   test:
     output: "Test.js"
     main: true
-    runtimeTypeChecks: false
     externs: "extern.purs"
 
 port   = 3333
@@ -60,14 +58,19 @@ build = (k) -> ->
   o   = options[k]
   psc = gulp-purescript.psc o
   lsc = gulp-livescript bare : true
+  fil = gulp-filter (file) ->
+    if k is "test" 
+    then not /Main.purs/.test file.path 
+    else not /Test/ig.test file.path 
 
   psc.on "error" ({message}) ->
     console.error message
     psc.end()
 
   gulp.src x.src 
+    .pipe fil 
     .pipe gulp-if /.purs/, psc
-    .pipe gulp-if /.ls/, lsc
+    .pipe gulp-if /.ls/,   lsc
     .pipe gulp-concat o.output
     .pipe gulp.dest x.dest
 

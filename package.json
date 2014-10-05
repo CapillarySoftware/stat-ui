@@ -11,6 +11,7 @@
     "gulp": "~3.8.6",
     "gulp-concat": "~2.3.3",
     "gulp-file-include": "^0.5.1",
+    "gulp-filter": "^1.0.2",
     "gulp-if": "~1.2.2",
     "gulp-karma": "0.0.4",
     "gulp-livescript": "^1.1.0",
