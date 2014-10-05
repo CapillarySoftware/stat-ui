@@ -1,17 +1,27 @@
 module App.Presentables where
 
-import Presentable
 import Presentable.ViewParser
+import Presentable
+import Data.Function
+import Data.Maybe
+import Control.Monad.Trans
+import Control.Monad.Eff
 
-foreign import linker """
-  function linker(linkerName){
+-- foreign import linker "" :: forall a p e. String -> Linker a p e 
+
+foreign import linkerImpl """
+  function linkerImpl(linkerName){
     return function(p){
       return function(a){
-        window[linkerName](p, a);
+        return window[linkerName](p, a);
       };
     };
-  } """ :: forall a p e. String -> Linker a p e
+  } 
+  """ :: forall x a p e. Maybe x -> (x -> Maybe x) -> String -> p -> a -> Maybe p
 
-registerPresentables = register "Input" (linker "InputLinker")
+linker :: forall a p e. String -> Linker a p e
+linker s (Just p) (Just a) = return $ linkerImpl Nothing Just s p a
+
+registerPresentables = register "Input" (linker "InputLinker" :: forall p e. Linker (foo :: String) p e)
                      $ emptyRegistery
 

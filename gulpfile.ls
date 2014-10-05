@@ -1,6 +1,7 @@
 require! <[
   express 
   run-sequence 
+  js-string-escape
   gulp 
   gulp-if 
   gulp-karma
@@ -20,7 +21,7 @@ paths =
       bower_components/purescript-*/src/**/*.purs.hs
       presentable/src/**/*.purs
       src/**/*.purs
-      src/**/*.ls
+      src/**/*.ls      
     ]>
     dest: "public/js"
 
@@ -74,8 +75,10 @@ gulp.task "build:test", build "test"
 gulp.task "build:prod", build "prod"
 gulp.task "build:html" ->
   inc = gulp-file-include(
-    prefix : "@"
+    prefix   : "@"
     basepath : "yaml"
+    filters  : 
+      escape : js-string-escape
   )
 
   gulp.src "yaml/html.html"

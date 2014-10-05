@@ -1,6 +1,5 @@
 module Main where
 
-import Presentable.Router
-import App.Presentables
+import App.Routes
 
-main = Debug.Trace.trace "moo" -- registerPresentables
+main = App.Routes.init

@@ -1,4 +1,4 @@
 @InputLinker = (p, a) ->
-  console.log p
-  true
+  console.log "--->", a
+  returnEff PS.Data_Maybe.Nothing
 

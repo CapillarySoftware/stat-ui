@@ -1,0 +1,1 @@
+@returnEff = (x) -> -> new x
