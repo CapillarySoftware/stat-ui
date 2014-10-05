@@ -26,7 +26,8 @@
     "purescript-oo-ffi": "~0.0.1",
     "purescript-transformers": "~0.2.1",
     "node-uuid": "~1.4.1",
-    "purescript-reactive": "*"
+    "purescript-reactive": "*",
+    "chartjs": "~0.2.0"
   },
   "devDependencies": {
     "purescript-quickcheck": "~0.1.3",
