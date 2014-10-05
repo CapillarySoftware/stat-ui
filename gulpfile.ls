@@ -29,6 +29,7 @@ paths =
   test:
     src: <[
       bower_components/chai/chai.js
+      bower_components/tiny-trigger/dist/tinytrigger.js
       bower_components/js-yaml/dist/js-yaml.js
       bower_components/socket.io-client/socket.io.js
       bower_components/purescript-*/src/**/*.purs
