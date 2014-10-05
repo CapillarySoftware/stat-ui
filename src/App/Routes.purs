@@ -14,5 +14,5 @@ foreign import yaml "window.yaml = window.yaml || {};" ::
 rs = [ (Tuple {url:"/index", title:"home", "data":{}} yaml.index) ]
 
 init = do
-  route rs $ renderYaml Nothing $ registerPresentables
+  registerPresentables # renderYaml Nothing >>> route rs
   initRoutes

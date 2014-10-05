@@ -1,10 +1,14 @@
 module App.Controller where
 
 import Data.Maybe
+import Control.Reactive
 import Presentable
+import Debug.Trace
 
-controller :: forall a p e. Linker a p e
-controller _ _ = return Nothing
+controller _ _ = do
+  r <- newRVar "moo"
+  subscribe r \r' -> trace r'
+  return $ Just { chart : r }
 
 
 

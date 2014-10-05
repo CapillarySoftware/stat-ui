@@ -1,3 +1,6 @@
-- Input:
-    attributes:
-      foo : "foo"
+- Controller:
+    children : 
+      - Title:
+          attributes : 
+            title : "type now"
+      - ChartSelector
