@@ -1,0 +1,6 @@
+- Controller:
+    children : 
+      - Title:
+          attributes : 
+            title : "type now"
+      - ChartSelector

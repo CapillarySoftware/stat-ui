@@ -7,6 +7,6 @@ import Test.Chai
 
 test = describe "true dat" $ do
 
-  it "ithTrue" $ expect ithTrue `toEqual` true 
+  it "ithTrue" $ expect true `toEqual` true 
 
 

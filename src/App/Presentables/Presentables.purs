@@ -1,17 +1,22 @@
 module App.Presentables where
 
-import Presentable
 import Presentable.ViewParser
+import Presentable
+import Data.Function
+import Data.Maybe
+import qualified Data.Map as M
+import Control.Monad.Trans
+import Control.Monad.Eff
+import Control.Monad.Eff.Exception
+import Control.Reactive
 
-foreign import linker """
-  function linker(linkerName){
-    return function(p){
-      return function(a){
-        window[linkerName](p, a);
-      };
-    };
-  } """ :: forall a p e. String -> Linker a p e
+import App.Presentables.Foreign
+import App.Presentables.ChartSelector
+import App.Controller
 
-registerPresentables = register "input" (linker "InputLinker")
-                     $ emptyRegistery
+registerPresentables = emptyRegistery
+                     # register "ChartSelector" chartSelector
+                     # register "Title"         (linker "TitleLinker")
+                     # register "Controller"    controller
+                     
 
