@@ -1,2 +1,4 @@
-@InputLinker = (p, a) -> true
+@InputLinker = (p, a) ->
+  console.log p
+  true
 

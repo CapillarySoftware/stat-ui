@@ -14,6 +14,8 @@
     "gulp-karma": "0.0.4",
     "gulp-livescript": "^1.1.0",
     "gulp-purescript": "0.0.9",
+    "gulp-rename": "^1.2.0",
+    "gulp-file-include": "^0.5.1",
     "karma": "~0.12.17",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "~0.1.4",

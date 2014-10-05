@@ -1,7 +1,5 @@
 module Network.SocketIO where
 
-import Control.Monad.Trans
-import Control.Monad.Cont.Trans
 import Control.Monad.Eff
 import Data.Foreign.OOFFI
 
@@ -38,9 +36,7 @@ emit s d so = method2Eff "emit" so s d <:> so
 on :: forall a b e. String -> (Response a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
 on s f so = method2Eff "on" so s f <:> so
 
-onCont :: forall a e. Socket -> String -> ContT Socket (Eff (on :: On | e)) (Response a)
-onCont so s = cont so s # ContT
-  where cont so s fn = on s fn so 
+
 
 instance functorResponse :: Functor Response where
   (<$>) fn (Response d) = Response (fn d)

@@ -1,12 +1,14 @@
 require! <[
-  gulp 
-  gulp-purescript 
-  gulp-livescript 
-  gulp-concat 
-  gulp-if 
   express 
   run-sequence 
+  gulp 
+  gulp-if 
   gulp-karma
+  gulp-concat 
+  gulp-rename
+  gulp-purescript 
+  gulp-livescript
+  gulp-file-include
 ]>
 
 paths =
@@ -20,7 +22,7 @@ paths =
       src/**/*.purs
       src/**/*.ls
     ]>
-    dest: "lib"
+    dest: "public/js"
 
   test:
     src: <[
@@ -31,7 +33,7 @@ paths =
       bower_components/purescript-*/src/**/*.purs.hs
       presentable/src/**/*.purs
       src/**/*.ls
-      src/**/*.purs
+      src/*/**/*.purs
       tests/**/*.ls
       tests/**/*.purs
     ]>
@@ -39,7 +41,7 @@ paths =
 
 options =
   prod:
-    output: "Todo.js"
+    output: "App.js"
     main: true
 
   test:
@@ -70,6 +72,16 @@ build = (k) -> ->
 
 gulp.task "build:test", build "test"
 gulp.task "build:prod", build "prod"
+gulp.task "build:html" ->
+  inc = gulp-file-include(
+    prefix : "@"
+    basepath : "yaml"
+  )
+
+  gulp.src "yaml/html.html"
+    .pipe inc
+    .pipe gulp-rename "index.html"
+    .pipe gulp.dest "public"
 
 gulp.task "test:unit" ->
   gulp.src options.test.output .pipe gulp-karma(
@@ -90,5 +102,6 @@ gulp.task "doc" ->
     .pipe purescript.docgen()
     .pipe gulp.dest "DocGen.md"
 
-gulp.task "default" <[build:prod watch serve]>
+gulp.task "build" <[build:prod build:html]>
+gulp.task "default" <[build watch serve]>
 gulp.task "test" -> run-sequence "build:test" "test:unit"

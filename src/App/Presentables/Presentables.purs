@@ -12,6 +12,6 @@ foreign import linker """
     };
   } """ :: forall a p e. String -> Linker a p e
 
-registerPresentables = register "input" (linker "InputLinker")
+registerPresentables = register "Input" (linker "InputLinker")
                      $ emptyRegistery
 
