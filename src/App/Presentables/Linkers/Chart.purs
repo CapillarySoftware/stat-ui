@@ -49,7 +49,7 @@ type ChartOptions = { scaleShowGridLines      :: Boolean
                     , datasetFill             :: Boolean
                     , legendTemplate          :: String}
 
-foreign import data Chart    :: *
+foreign import data Chart      :: *
 foreign import chart_ "chart_" :: Context2D -> String -> ChartInput -> Gen Chart 
 
 chart :: forall e. ChartType -> ChartInput -> Context2D -> Eff (gen :: GenElem, canvas :: Canvas | e) Chart

@@ -12,4 +12,4 @@ chartSelector :: forall k v a p e.
 
 chartSelector _ p@(Just {chart = r}) = input 
                                    >>= inputRVar r 
-                                   >>= const (return p)
+                                   >>= const (return Nothing)
