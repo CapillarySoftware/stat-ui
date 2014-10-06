@@ -4,3 +4,4 @@
           attributes : 
             title : "type now"
       - ChartSelector
+      - StatChart

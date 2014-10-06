@@ -10,3 +10,7 @@ html {
 h1{
   color : white;
 }
+
+#stage {
+  background: hsla(0, 0%, 90%, 1);
+}
