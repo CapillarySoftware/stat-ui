@@ -18,9 +18,9 @@ import App.Presentables.Linkers.Chart
 import App.Controller
 
 registerPresentables = emptyRegistery
+                     # register "Controller"    controller
                      # register "ChartSelector" chartSelector
                      # register "Title"         (linker "TitleLinker")
-                     # register "Controller"    controller
                      # register "StatChart"     statChart
                      
 
