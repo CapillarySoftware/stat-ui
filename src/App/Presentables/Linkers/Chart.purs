@@ -2,7 +2,6 @@ module App.Presentables.Linkers.Chart where
 
 import Graphics.Canvas
 import Graphics.Color 
-import Graphics.Color.RGBA
 import Control.Monad.Eff
 import Data.Maybe
 import Presentable 
@@ -31,6 +30,7 @@ type ChartDataSet = { label                   :: String
                     , fillColor               :: String
                     , strokeColor             :: String
                     , pointColor              :: String
+                    , pointStrokeColor        :: String
                     , highlightFill           :: String
                     , highlightStroke         :: String
                     , "data"                  :: [Number] }
@@ -51,8 +51,6 @@ type ChartOptions = { scaleShowGridLines      :: Boolean
 
 foreign import data Chart    :: *
 foreign import chart_ "chart_" :: Context2D -> String -> ChartInput -> Gen Chart 
-
-grey = RGBA 220 220 220 1
 
 chart :: forall e. ChartType -> ChartInput -> Context2D -> Eff (gen :: GenElem, canvas :: Canvas | e) Chart
 chart t i c = chart_ c (show t) i

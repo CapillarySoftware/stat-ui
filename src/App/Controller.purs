@@ -4,20 +4,26 @@ import Data.Maybe
 import Control.Reactive
 import Presentable
 import Debug.Trace
+import Graphics.Color.RGBA
 
 import App.Presentables.Linkers.Chart
 
+grey  = RGBA 220 220 220 1
+tgrey = RGBA 220 220 220 0.2
+white = RGBA 255 255 255 1
+
 chartJsDummy :: ChartInput
 chartJsDummy = {
-    labels   : ["Stat"]
+    labels   : ["January", "February", "March", "April", "May", "June", "July"]
   , datasets : [
       { label           : "Stat1"
-      , fillColor       : show grey
+      , fillColor       : show tgrey
       , strokeColor     : show grey
       , pointColor      : show grey
-      , highlightFill   : show grey
+      , pointStrokeColor: show white
+      , highlightFill   : show white
       , highlightStroke : show grey
-      , "data"          : [12, 15, 45, 32]
+      , "data"          : [65, 59, 80, 81, 56, 55, 40]
       }
     ]
   }

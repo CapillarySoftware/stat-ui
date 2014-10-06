@@ -11188,6 +11188,7 @@ function curry$(f, bound){
   return _curry();
 }
 this.chart_ = curry$(function(ctx, type, data, options){
+  console.log(type, data);
   return new Chart(ctx)[type](data, options);
 });
 function curry$(f, bound){
@@ -19493,7 +19494,6 @@ var PS = PS || {};
 PS.App_Presentables_Linkers_Chart = (function () {
     "use strict";
     var Prelude = PS.Prelude;
-    var Graphics_Color_RGBA = PS.Graphics_Color_RGBA;
     var Data_Maybe = PS.Data_Maybe;
     var Control_Monad_Eff = PS.Control_Monad_Eff;
     var Graphics_Canvas = PS.Graphics_Canvas;
@@ -19545,7 +19545,6 @@ PS.App_Presentables_Linkers_Chart = (function () {
             throw new Error("Failed pattern match");
         });
     };
-    var grey = new Graphics_Color_RGBA.RGBA(220, 220, 220, 1);
     var chart = function (t) {
         return function (i) {
             return function (c) {
@@ -19570,7 +19569,6 @@ PS.App_Presentables_Linkers_Chart = (function () {
         Doughnut: Doughnut, 
         statChart: statChart, 
         chart: chart, 
-        grey: grey, 
         chart_: chart_, 
         showChartType: showChartType
     };
@@ -19689,21 +19687,24 @@ PS.App_Controller = (function () {
     "use strict";
     var Prelude = PS.Prelude;
     var Graphics_Color_RGBA = PS.Graphics_Color_RGBA;
-    var App_Presentables_Linkers_Chart = PS.App_Presentables_Linkers_Chart;
     var Control_Monad_Eff = PS.Control_Monad_Eff;
     var Control_Reactive = PS.Control_Reactive;
     var Debug_Trace = PS.Debug_Trace;
     var Data_Maybe = PS.Data_Maybe;
+    var white = new Graphics_Color_RGBA.RGBA(255, 255, 255, 1);
+    var tgrey = new Graphics_Color_RGBA.RGBA(220, 220, 220, 0.2);
+    var grey = new Graphics_Color_RGBA.RGBA(220, 220, 220, 1);
     var chartJsDummy = {
-        labels: [ "Stat" ], 
+        labels: [ "January", "February", "March", "April", "May", "June", "July" ], 
         datasets: [ {
             label: "Stat1", 
-            fillColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(App_Presentables_Linkers_Chart.grey), 
-            strokeColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(App_Presentables_Linkers_Chart.grey), 
-            pointColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(App_Presentables_Linkers_Chart.grey), 
-            highlightFill: Prelude.show(Graphics_Color_RGBA.showRGBA())(App_Presentables_Linkers_Chart.grey), 
-            highlightStroke: Prelude.show(Graphics_Color_RGBA.showRGBA())(App_Presentables_Linkers_Chart.grey), 
-            data: [ 12, 15, 45, 32 ]
+            fillColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(tgrey), 
+            strokeColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(grey), 
+            pointColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(grey), 
+            pointStrokeColor: Prelude.show(Graphics_Color_RGBA.showRGBA())(white), 
+            highlightFill: Prelude.show(Graphics_Color_RGBA.showRGBA())(white), 
+            highlightStroke: Prelude.show(Graphics_Color_RGBA.showRGBA())(grey), 
+            data: [ 65, 59, 80, 81, 56, 55, 40 ]
         } ]
     };
     var controller = function (_442) {
@@ -19722,7 +19723,10 @@ PS.App_Controller = (function () {
     };
     return {
         controller: controller, 
-        chartJsDummy: chartJsDummy
+        chartJsDummy: chartJsDummy, 
+        white: white, 
+        tgrey: tgrey, 
+        grey: grey
     };
 })();
 var PS = PS || {};
