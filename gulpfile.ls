@@ -113,3 +113,4 @@ gulp.task "doc" ->
 gulp.task "build" <[build:prod build:html]>
 gulp.task "default" <[build watch serve]>
 gulp.task "test" -> run-sequence "build:test" "test:unit"
+gulp.task "travis" <[build test]>
