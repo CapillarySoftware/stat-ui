@@ -44,9 +44,9 @@ foreign import getUUID """
   """ :: forall e. Eff (uuidGen :: UUIDgen | e) UUID
 
 listenForStat r = getUUID >>= \uuid -> 
-  getSocketSinglton "http://localhost:5000" 
+  getSocketSinglton "http://localhost:8080/socket" 
   >>= on   "stat" (writeRVar r)
-  >>= emit "stat" uuid >>> interval 200
+  >>= emit "stat" uuid >>> interval 2000
 
 controller _ _ = do
   r <- newRVar "moo"
