@@ -44,7 +44,7 @@ foreign import getUUID """
 
 listenForStat r = getSocketSinglton
   >>= on name (writeRVar r)
-  >>= \s -> interval 2000 $ do
+  >>= \s -> interval 1000 $ do
     uuid <- getUUID
     emit name uuid s 
   where name = "rawStats"
