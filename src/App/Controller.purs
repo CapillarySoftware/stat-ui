@@ -2,9 +2,13 @@ module App.Controller where
 
 import Data.Maybe
 import Control.Reactive
+import Control.Reactive.Timer
 import Presentable
+import Network.SocketIO
 import Debug.Trace
 import Graphics.Color.RGBA
+import Control.Monad.Eff
+import Debug.Trace
 
 import App.Presentables.Linkers.Chart
 
@@ -28,8 +32,25 @@ chartJsDummy = {
     ]
   }
 
+foreign import data UUID    :: *
+foreign import data UUIDgen :: !
+
+foreign import getUUID """
+  function getUUID(){
+    return function(){
+      return uuid.v1();
+    };
+  }
+  """ :: forall e. Eff (uuidGen :: UUIDgen | e) UUID
+
+listenForStat r = getUUID >>= \uuid -> 
+  getSocketSinglton "http://localhost:5000" 
+  >>= on   "stat" (writeRVar r)
+  >>= emit "stat" uuid >>> interval 200
+
 controller _ _ = do
   r <- newRVar "moo"
+  listenForStat r 
   subscribe r \r' -> trace r'
   return $ Just { chart : r, chartDataSet : chartJsDummy }
 

@@ -33,7 +33,7 @@ data Response d = Response d
 emit :: forall d e. String -> d -> Socket -> Eff (emit :: Emit | e) Socket
 emit s d so = method2Eff "emit" so s d <:> so 
 
-on :: forall a b e. String -> (Response a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
+on :: forall a b e. String -> (a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
 on s f so = method2Eff "on" so s f <:> so
 
 
