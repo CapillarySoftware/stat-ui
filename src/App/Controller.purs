@@ -8,6 +8,7 @@ import Network.SocketIO
 import Debug.Trace
 import Graphics.Color.RGBA
 import Control.Monad.Eff
+import Control.Bind(join)
 import Debug.Trace
 
 import App.Presentables.Linkers.Chart
@@ -37,21 +38,21 @@ foreign import data UUIDgen :: !
 
 foreign import getUUID """
   function getUUID(){
-    return function(){
-      return uuid.v1();
-    };
+    return uuid.v1();
   }
   """ :: forall e. Eff (uuidGen :: UUIDgen | e) UUID
 
-listenForStat r = getUUID >>= \uuid -> 
-  getSocketSinglton "http://localhost:8080/socket" 
-  >>= on   "stat" (writeRVar r)
-  >>= emit "stat" uuid >>> interval 2000
+listenForStat r = getSocketSinglton
+  >>= on name (writeRVar r)
+  >>= \s -> interval 2000 $ do
+    uuid <- getUUID
+    emit name uuid s 
+  where name = "rawStats"
 
 controller _ _ = do
-  r <- newRVar "moo"
-  listenForStat r 
+  r <- newRVar "moo"  
   subscribe r \r' -> trace r'
+  listenForStat r 
   return $ Just { chart : r, chartDataSet : chartJsDummy }
 
 

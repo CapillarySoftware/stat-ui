@@ -16,6 +16,7 @@ require! <[
 paths =
   prod:
     src: <[
+      bower_components/node-uuid/uuid.js
       bower_components/chartjs/Chart.js
       bower_components/js-yaml/dist/js-yaml.js
       bower_components/socket.io-client/socket.io.js
