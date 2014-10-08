@@ -7,8 +7,6 @@ import Control.Bind
 import Network.SocketIO
 import Debug.Foreign
 
-getSocket = getSocketSinglton "http://localhost:5000"
-
 foreign import data UUID    :: *
 foreign import data UUIDgen :: !
 
@@ -33,14 +31,14 @@ type StatQuery = Query { name      :: String
 type EE e = Eff (uuidGen :: UUIDgen, emit :: Emit, connect :: Connect | e)
 
 emitEnvelope :: forall e. EE e Socket
-emitEnvelope = join $ f <$> getUUID <*> getSocket
+emitEnvelope = join $ f <$> getUUID <*> getSocketSinglton
   where f uu so = emit "StatQuery" {id : uu} so 
 
 type RQ e = EE (on :: On | e)
 
 runStatQuery :: forall a r e. Envelope StatQuery -> (Response r -> RQ e a) -> RQ e Socket
 runStatQuery (Envelope env) fn = let e = "StatQuery"
-  in getUUID >>= \uuid -> getSocket >>= emit e env{id = uuid} >>= on e fn
+  in getUUID >>= \uuid -> getSocketSinglton >>= emit e env{id = uuid} >>= on e fn
 
 
 class Request a where 

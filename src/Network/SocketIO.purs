@@ -1,6 +1,7 @@
 module Network.SocketIO where
 
 import Control.Monad.Eff
+import qualified Data.Function as F
 import Data.Foreign.OOFFI
 
 foreign import data SocketIO   :: *
@@ -17,26 +18,28 @@ type EventName = String
 type Epoch     = Number
 
 foreign import getSocketSinglton """
-  function getSocketSinglton(url){
-    return function(){
-      if(window.Socket){ return window.Socket; }
-      return window.Socket = io.connect(url);
-    };
+  function getSocketSinglton(){
+    if(window.Socket){ return window.Socket; }
+    return window.Socket = io();
   }
-  """ :: forall e. String -> Eff (connect :: Connect | e) Socket
+  """ :: forall e. Eff (connect :: Connect | e) Socket
 
 data Response d = Response d
 
 (<:>) :: forall a b e. (Eff e a) -> b -> Eff e b
-(<:>) f x = f >>= \_ -> return x
+(<:>) f x = f >>= const (return x)
 
 emit :: forall d e. String -> d -> Socket -> Eff (emit :: Emit | e) Socket
-emit s d so = method2Eff "emit" so s d <:> so 
+emit s d so = method2Eff "emit" so s d <:> so  
 
-on :: forall a b e. String -> (Response a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
-on s f so = method2Eff "on" so s f <:> so
-
-
+foreign import on_ """
+  function on_(so, s, f){ return function(){
+    so.on(s, function(d){ f(d)(); });
+  }; }
+  """ :: forall a b e. F.Fn3 Socket String (a -> Eff (on :: On | e) b) (Eff (on :: On | e) Socket)
+  
+on :: forall a b e. String -> (a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
+on s f so = F.runFn3 on_ so s f <:> so 
 
 instance functorResponse :: Functor Response where
   (<$>) fn (Response d) = Response (fn d)
