@@ -10,6 +10,5 @@ import App.Presentables.Binders
 chartSelector :: forall k v a p e. 
   Linker a (chart :: (RVar v) | p) (reactive :: Reactive, gen :: GenElem | e)
 
-chartSelector _ p@(Just {chart = r}) = input 
-                                   >>= inputRVar r 
+chartSelector _ p@(Just {chart = r}) = r <||> input
                                    >>= const (return Nothing)
