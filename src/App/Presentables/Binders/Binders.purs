@@ -6,22 +6,23 @@ import App.Presentables.Generators
 
 type RE e i = Eff (reactive :: Reactive | e) i
 
-infixr 10 <||>
+infixr 10 <<||>>
 
 class UIBind a where
-  (<||>) :: forall r e. RVar r -> RE e a -> RE e a
-  (|>>)  :: forall r e. RVar r -> RE e a -> RE e a
-  (<<|)  :: forall r e. RVar r -> RE e a -> RE e a
+  (<<||>>):: forall r e. RVar r -> RE e a -> RE e a
+  (|>>)   :: forall r e. RVar r -> RE e a -> RE e a
+  (<<|)   :: forall r e. RVar r -> RE e a -> RE e a
   -- (|>)    :: forall r. RVar r -> a -> a
   -- (<|)    :: forall r. RVar r -> a -> RE a
 
 instance inputUIBind :: UIBind Input where
-  (<||>) r a = do 
+  (<<||>>) r a = do 
     r |>> a
     r <<| a 
-  (<||>) r i = i >>= inputBindRight r
   (|>>)  r i = i >>= inputBindRight r 
-  (<<|)  r i = i >>= inputBindRight r
+  (<<|)  r i = i >>= inputBindLeft r
+
+(<:>) a b = a >>= const (return b)
 
 type Bind r e = (RVar r) -> Input -> Eff (reactive :: Reactive | e) Input
 
