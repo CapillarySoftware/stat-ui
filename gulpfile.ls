@@ -22,7 +22,7 @@ paths =
       bower_components/socket.io-client/socket.io.js
       bower_components/purescript-*/src/**/*.purs
       bower_components/purescript-*/src/**/*.purs.hs
-      presentable/src/**/*.purs
+      bower_components/presentable*/src/**/*.purs 
       src/**/*.ls      
       src/**/*.purs
     ]>
@@ -36,7 +36,7 @@ paths =
       bower_components/socket.io-client/socket.io.js
       bower_components/purescript-*/src/**/*.purs
       bower_components/purescript-*/src/**/*.purs.hs
-      presentable/src/**/*.purs
+      bower_components/presentable*/src/**/*.purs 
       src/**/*.ls
       src/**/*.purs
     ]>
@@ -111,7 +111,7 @@ gulp.task "doc" ->
     .pipe purescript.docgen()
     .pipe gulp.dest "DocGen.md"
 
-gulp.task "build" <[build:prod build:html]>
+gulp.task "build"   <[build:prod build:html]>
 gulp.task "default" <[build watch serve]>
 gulp.task "test" -> run-sequence "build:test" "test:unit"
-gulp.task "travis" <[build test]>
+gulp.task "travis"  <[build test]>

@@ -28,7 +28,8 @@
     "node-uuid": "~1.4.1",
     "purescript-reactive": "*",
     "chartjs": "~0.2.0",
-    "purescript-canvas": "~0.1.5"
+    "purescript-canvas": "~0.1.5",
+    "presentable": "~0.0.0"
   },
   "devDependencies": {
     "purescript-quickcheck": "~0.1.3",
