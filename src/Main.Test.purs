@@ -5,4 +5,3 @@ import Control.Monad.Eff
 main = do
   App.Controller.Test.test
   App.Presentables.Test.test
-  System.Sniffer.Test.test
