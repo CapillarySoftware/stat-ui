@@ -6,6 +6,7 @@ import Control.Monad.Eff
 import Control.Bind
 import Network.SocketIO
 import Debug.Foreign
+import Data.Date
 
 foreign import data UUID    :: *
 foreign import data UUIDgen :: !
@@ -18,32 +19,25 @@ foreign import getUUID """
   }
   """ :: forall e. Eff (uuidGen :: UUIDgen | e) UUID
 
-type Query p    = { "type" :: String
-                  , params :: p }
+type StatName = String
 
-newtype Envelope p = Envelope { id     :: UUID
-                              , query  :: Query p }
+type StatRequest = { tracker   :: UUID
+                   , name      :: StatName
+                   , startDate :: Milliseconds
+                   , endDate   :: Milliseconds }
 
-type StatQuery = Query { name      :: String
-                       , startDate :: Epoch 
-                       , endDate   :: Epoch }
+statEventName = "rawStat"
 
-type EE e = Eff (uuidGen :: UUIDgen, emit :: Emit, connect :: Connect | e)
-
-emitEnvelope :: forall e. EE e Socket
-emitEnvelope = join $ f <$> getUUID <*> getSocketSinglton
-  where f uu so = emit "StatQuery" {id : uu} so 
-
-type RQ e = EE (on :: On | e)
-
-runStatQuery :: forall a r e. Envelope StatQuery -> (Response r -> RQ e a) -> RQ e Socket
-runStatQuery (Envelope env) fn = let e = "StatQuery"
-  in getUUID >>= \uuid -> getSocketSinglton >>= emit e env{id = uuid} >>= on e fn
+requestStat :: forall e. String -> Date -> Date -> Socket -> Eff (on :: On | e) Socket
+requestStat n sd ed s = do 
+  u <- getUUID
+  emit statEventName { tracker : u, name : n, startDate : sd', endDate : ed' } s
+  where 
+  sd' = toEpochMilliseconds sd 
+  ed' = toEpochMilliseconds ed
 
 
-class Request a where 
-  send :: forall a b r e. a -> (Response r -> RQ e b) -> RQ e Socket
 
--- instance requestEnvelope :: Request Envelope p where
---   send (Envelope p) = runStatQuery (Envelope p)
+
+
 

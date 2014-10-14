@@ -24,8 +24,6 @@ foreign import getSocketSinglton """
   }
   """ :: forall e. Eff (connect :: Connect | e) Socket
 
-data Response d = Response d
-
 (<:>) :: forall a b e. (Eff e a) -> b -> Eff e b
 (<:>) f x = f >>= const (return x)
 
@@ -40,18 +38,4 @@ foreign import on_ """
   
 on :: forall a b e. String -> (a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
 on s f so = F.runFn3 on_ so s f <:> so 
-
-instance functorResponse :: Functor Response where
-  (<$>) fn (Response d) = Response (fn d)
-
-instance applyResponse :: Apply Response where 
-  (<*>) (Response fn) x = fn <$> x
-
-instance applicativeResponse :: Applicative Response where 
-  pure = Response
-
-instance bindResponse :: Bind Response where
-  (>>=) (Response d) k = k d
-
-instance monadResponse :: Monad Response
 
