@@ -6,7 +6,8 @@ import Control.Monad.Eff
 import Control.Bind
 import Network.SocketIO
 import Debug.Foreign
-import Data.Date
+import Data.Moment
+import Data.Moment.GetSet
 
 foreign import data UUID    :: *
 foreign import data UUIDgen :: !
@@ -23,18 +24,21 @@ type StatName = String
 
 type StatRequest = { tracker   :: UUID
                    , name      :: StatName
-                   , startDate :: Milliseconds
-                   , endDate   :: Milliseconds }
+                   , startDate :: Epoch
+                   , endDate   :: Epoch }
 
 statEventName = "rawStat"
 
-requestStat :: forall e. String -> Date -> Date -> Socket -> Eff (on :: On | e) Socket
+requestStat :: forall e. String -> Moment -> Moment -> Socket -> Eff (uuidGen :: UUIDgen, on :: On, emit :: Emit | e) Socket
 requestStat n sd ed s = do 
   u <- getUUID
-  emit statEventName { tracker : u, name : n, startDate : sd', endDate : ed' } s
-  where 
-  sd' = toEpochMilliseconds sd 
-  ed' = toEpochMilliseconds ed
+  emit statEventName 
+    { tracker : u, name : n
+    , startDate : (epoch sd), endDate : (epoch ed) }
+    s
+
+subscribeStat :: forall a b e. (a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
+subscribeStat = on statEventName
 
 
 

@@ -15,7 +15,6 @@ foreign import data Disconnect :: !
 
 type Url       = String
 type EventName = String
-type Epoch     = Number
 
 foreign import getSocketSinglton """
   function getSocketSinglton(){
