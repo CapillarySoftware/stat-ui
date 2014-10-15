@@ -29,7 +29,9 @@ type StatRequest = { tracker   :: UUID
 
 statEventName = "rawStat"
 
-requestStat :: forall e. String -> Moment -> Moment -> Socket -> Eff (uuidGen :: UUIDgen, on :: On, emit :: Emit | e) Socket
+requestStat :: forall e. String -> Moment -> Moment -> Socket -> Eff ( uuidGen :: UUIDgen
+                                                                     , on      :: On
+                                                                     , emit    :: Emit | e ) Socket
 requestStat n sd ed s = do 
   u <- getUUID
   emit statEventName 
