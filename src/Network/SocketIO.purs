@@ -19,7 +19,7 @@ type EventName = String
 foreign import getSocketSinglton """
   function getSocketSinglton(){
     if(window.Socket){ return window.Socket; }
-    return window.Socket = io();
+    return window.Socket = io('/socket');
   }
   """ :: forall e. Eff (connect :: Connect | e) Socket
 
@@ -27,7 +27,7 @@ foreign import getSocketSinglton """
 (>>|) f x = f >>= const (return x)
 
 emit :: forall d e. String -> d -> Socket -> Eff (emit :: Emit | e) Socket
-emit s d so = method2Eff "emit" so s d >>| so  
+emit s d so = method2Eff "emit" so s d >>| so
 
 foreign import on_ """
   function on_(so, s, f){ return function(){

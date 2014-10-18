@@ -101,7 +101,9 @@ gulp.task "test:unit" ->
     action     : "run"
   )
 
-gulp.task "watch" -> gulp.watch paths.prod.src, <[build:prod]>
+gulp.task "watch" -> 
+  gulp.watch paths.prod.src, <[ build:prod ]>
+  gulp.watch <[ yaml/* ]>,   <[ build:html ]>
 
 gulp.task "serve" ->
   console.log "listening on port " + port

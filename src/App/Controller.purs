@@ -2,6 +2,8 @@ module App.Controller where
 
 import Data.Maybe
 import Data.Moment
+import Data.Moment.Duration
+import Data.Moment.Manipulate
 import Control.Reactive
 import Control.Reactive.Timer
 import Presentable
@@ -13,7 +15,8 @@ import Control.Bind(join)
 import Debug.Trace
 
 import App.Network.StatQuery
-import App.Presentables.Linkers.Chart
+import App.Presentables.Linkers.StatChart
+import App.Presentables.Generators.Chart
 
 grey  = RGBA 220 220 220 1
 tgrey = RGBA 220 220 220 0.2
@@ -37,12 +40,11 @@ chartJsDummy = {
 
 controller _ _ = do
   r <- newRVar "moo"
-  s <- getSocketSinglton
   n <- now 
 
-  Debug.Foreign.fprint n
+  let n' = subtract (Hours 24) n 
 
   subscribeStat $ writeRVar r
-  interval 1000 $ requestStat "stat8" n n
+  interval 1000 $ requestStat "stat8" n' n
 
   return $ Just { chart : r, chartDataSet : chartJsDummy }

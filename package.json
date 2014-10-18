@@ -8,7 +8,7 @@
     "LiveScript": "^1.2.0",
     "chai": "^1.9.2",
     "express": "~4.6.1",
-    "gulp": "~3.8.6",
+    "gulp": "*",
     "gulp-concat": "~2.3.3",
     "gulp-file-include": "^0.5.1",
     "gulp-filter": "^1.0.2",

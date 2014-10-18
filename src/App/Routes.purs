@@ -16,3 +16,4 @@ rs = [ (Tuple {url:"/index", title:"home", "data":{}} yaml.index) ]
 init = do
   registerPresentables # renderYaml Nothing >>> route rs
   initRoutes
+  

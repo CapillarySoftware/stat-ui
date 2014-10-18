@@ -25,19 +25,27 @@ type StatRequest = { tracker   :: UUID
                    , startDate :: Epoch
                    , endDate   :: Epoch }
 
-rawStat = "rawStat"
+rawStats = "rawStats"
 
--- requestStat :: forall e. String -> Moment -> Moment -> Socket -> Eff ( uuidGen :: UUIDgen
---                                                                      , on      :: On
---                                                                      , emit    :: Emit | e ) Socket
-requestStat n sd ed s = let
-    -- go :: StatRequest -> forall e. Eff (emit :: Emit | e) Socket
-    go sr = emit rawStat (sr :: StatRequest)
-  in getUUID >>= \u -> getSocketSinglton >>= 
-    go { tracker : u, name : n, startDate : (epoch sd), endDate : (epoch ed) }
+peek a = do
+  fprint a 
+  return a
 
-subscribeStat :: forall a b e. (a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
-subscribeStat = on rawStat
+emitPeek n d s = do
+  fprint n
+  fprint d 
+  emit n d s 
+
+requestStat :: forall e. String -> Moment -> Moment -> Eff ( uuidGen :: UUIDgen
+                                                           , connect :: Connect
+                                                           , emit    :: Emit | e ) Socket
+requestStat n sd ed = let go sr = emit rawStats (sr :: StatRequest)
+  in getUUID >>= \u -> getSocketSinglton >>= go 
+    { tracker : u, name : n, startDate : (epoch sd) / 1000, endDate : (epoch ed) / 1000 }
+
+type OC e = Eff (on :: On, connect :: Connect | e)
+subscribeStat :: forall a b e. (a -> OC e b) -> OC e Socket
+subscribeStat f = getSocketSinglton >>= on rawStats f 
 
 
 

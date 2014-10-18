@@ -14,7 +14,7 @@ import Debug.Trace
 import App.Presentables.Generators
 import App.Presentables.Foreign
 import App.Presentables.Linkers.ChartSelector
-import App.Presentables.Linkers.Chart
+import App.Presentables.Linkers.StatChart
 import App.Controller
 
 registerPresentables = emptyRegistery
