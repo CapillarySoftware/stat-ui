@@ -45,6 +45,6 @@ controller _ _ = do
   let n' = subtract (Hours 24) n 
 
   subscribeStat $ writeRVar r
-  interval 1000 $ requestStat "stat8" n' n
+  interval 1000 $ requestStat "stat8" n' n 
 
   return $ Just { chart : r, chartDataSet : chartJsDummy }

@@ -27,15 +27,6 @@ type StatRequest = { tracker   :: UUID
 
 rawStats = "rawStats"
 
-peek a = do
-  fprint a 
-  return a
-
-emitPeek n d s = do
-  fprint n
-  fprint d 
-  emit n d s 
-
 requestStat :: forall e. String -> Moment -> Moment -> Eff ( uuidGen :: UUIDgen
                                                            , connect :: Connect
                                                            , emit    :: Emit | e ) Socket
