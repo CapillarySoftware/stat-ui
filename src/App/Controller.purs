@@ -35,16 +35,14 @@ chartJsDummy = {
     ]
   }
 
-
 controller _ _ = do
   r <- newRVar "moo"
   s <- getSocketSinglton
   n <- now 
 
-  subscribeStat (writeRVar r) s
-  interval 1000 $ requestStat "stat8" n n s
+  Debug.Foreign.fprint n
+
+  subscribeStat $ writeRVar r
+  interval 1000 $ requestStat "stat8" n n
 
   return $ Just { chart : r, chartDataSet : chartJsDummy }
-
-
-

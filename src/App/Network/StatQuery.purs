@@ -14,9 +14,7 @@ foreign import data UUIDgen :: !
 
 foreign import getUUID """
   function getUUID(){
-    return function(){
-      return uuid.v1();
-    };
+    return uuid.v1();
   }
   """ :: forall e. Eff (uuidGen :: UUIDgen | e) UUID
 
@@ -27,20 +25,19 @@ type StatRequest = { tracker   :: UUID
                    , startDate :: Epoch
                    , endDate   :: Epoch }
 
-statEventName = "rawStat"
+rawStat = "rawStat"
 
-requestStat :: forall e. String -> Moment -> Moment -> Socket -> Eff ( uuidGen :: UUIDgen
-                                                                     , on      :: On
-                                                                     , emit    :: Emit | e ) Socket
-requestStat n sd ed s = do 
-  u <- getUUID
-  emit statEventName 
-    { tracker : u, name : n
-    , startDate : (epoch sd), endDate : (epoch ed) }
-    s
+-- requestStat :: forall e. String -> Moment -> Moment -> Socket -> Eff ( uuidGen :: UUIDgen
+--                                                                      , on      :: On
+--                                                                      , emit    :: Emit | e ) Socket
+requestStat n sd ed s = let
+    -- go :: StatRequest -> forall e. Eff (emit :: Emit | e) Socket
+    go sr = emit rawStat (sr :: StatRequest)
+  in getUUID >>= \u -> getSocketSinglton >>= 
+    go { tracker : u, name : n, startDate : (epoch sd), endDate : (epoch ed) }
 
 subscribeStat :: forall a b e. (a -> Eff (on :: On | e) b) -> Socket -> Eff (on :: On | e) Socket
-subscribeStat = on statEventName
+subscribeStat = on rawStat
 
 
 
