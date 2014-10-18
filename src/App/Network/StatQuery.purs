@@ -8,6 +8,9 @@ import Network.SocketIO
 import Debug.Foreign
 import Data.Moment
 import Data.Moment.GetSet
+import Data.Foreign
+import Data.Foreign.Index
+import Data.Foreign.Class
 
 foreign import data UUID    :: *
 foreign import data UUIDgen :: !
@@ -25,6 +28,8 @@ type StatRequest = { tracker   :: UUID
                    , startDate :: Epoch
                    , endDate   :: Epoch }
 
+type StatResponse = [{ts :: Epoch, value :: Number}]
+
 rawStats = "rawStats"
 
 requestStat :: forall e. String -> Moment -> Moment -> Eff ( uuidGen :: UUIDgen
@@ -35,7 +40,7 @@ requestStat n sd ed = let go sr = emit rawStats (sr :: StatRequest)
     { tracker : u, name : n, startDate : (epoch sd) / 1000, endDate : (epoch ed) / 1000 }
 
 type OC e = Eff (on :: On, connect :: Connect | e)
-subscribeStat :: forall a b e. (a -> OC e b) -> OC e Socket
+subscribeStat :: forall b e. (StatResponse -> OC e b) -> OC e Socket
 subscribeStat f = getSocketSinglton >>= on rawStats f 
 
 

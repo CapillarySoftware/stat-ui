@@ -67,9 +67,12 @@ chartDefaults = { scaleShowGridLines      : true
                 , responsive              : false }
 
 foreign import data Chart      :: *
-foreign import chart_ "chart_" :: Context2D -> String -> ChartInput -> ChartOptions -> Gen Chart 
+foreign import chart_ "chart_" :: 
+  forall e. Context2D -> String -> ChartInput -> ChartOptions -> Eff (gen :: GenElem | e) Chart 
 
-chart :: forall e. ChartType -> ChartInput -> ChartOptions -> Context2D -> Eff (gen :: GenElem, canvas :: Canvas | e) Chart
+chart :: forall e. ChartType -> ChartInput -> ChartOptions -> Context2D -> 
+  Eff (gen :: GenElem, canvas :: Canvas | e) Chart
 chart t i o c = chart_ c (show t) i o
 
-chart' t i c = chart t i chartDefaults c 
+foreign import updateChart_ "updateChart_" :: forall e. ChartInput -> Chart -> Eff (canvas :: Canvas | e) Chart
+update = updateChart_
