@@ -51,7 +51,7 @@ respond elem = do
 
 preflight :: StatResponse -> ChartInput
 preflight sr = let
-    sr' = take 20 $ reverse sr
+    sr' = take 100 $ reverse sr
     ls {ts = ts}   = calendar $ parseUnix ts
     ds {value = v} = v
   in default{ labels   = ls <$> sr'
@@ -63,8 +63,7 @@ statChart _ (Just {chartDataSet = d}) = getCanvasElementById "stage"
   >>= respond 
   >>= getContext2D 
   >>= chart Line default opts
-  >>= sub 
-  >>= const (return Nothing)
+  >>= sub >>= const (return Nothing)
   where 
   sub c = subscribe d $ \d' -> do
     update (preflight d') c
