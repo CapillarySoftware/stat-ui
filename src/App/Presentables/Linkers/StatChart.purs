@@ -51,11 +51,11 @@ respond elem = do
 
 preflight :: StatResponse -> ChartInput
 preflight sr = let
-    sr' = take 100 $ reverse sr
+    -- sr' = take 100 $ reverse sr
     ls {ts = ts}   = calendar $ parseUnix ts
     ds {value = v} = v
-  in default{ labels   = ls <$> sr'
-            , datasets = [ defaultSet{ "data" = ds <$> sr' } ] }
+  in default{ labels   = ls <$> sr
+            , datasets = [ defaultSet{ "data" = ds <$> sr } ] }
 
 statChart :: forall a p e. Linker a (chartDataSet :: RVar StatResponse | p) 
   (gen :: GenElem, canvas :: Canvas, resize :: Resize, reactive :: Reactive | e)
