@@ -1,7 +1,8 @@
 @chart_ = (ctx, type, data, options) --> -> 
-  new Chart(ctx)[type](data, options)
+  c = new Chart(ctx)
+  c.update = (data) -> c[type](data, options)
+  c.update data
+  return c
 
-@updateChart_ = ({datasets, labels}, chart) --> -> 
-  chart.datasets = datasets
-  chart.labels   = labels 
-  chart.update!
+@updateChart_ = (data, chart) --> -> 
+  chart.update data

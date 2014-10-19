@@ -6,8 +6,13 @@ import Graphics.Color.RGBA
 import Control.Monad.Eff
 import Control.Reactive
 import Control.Reactive.Resize
+import Control.Bind
 import Presentable 
 import Data.Maybe
+import Data.Moment
+import Data.Moment.Parse
+import Data.Array
+import Data.Foreign.OOFFI
 
 import App.Network.StatQuery
 import App.Presentables.Generators
@@ -17,42 +22,50 @@ grey  = RGBA 16 16 16 1
 tgrey = RGBA 220 220 220 0.2
 white = RGBA 255 255 255 1
 
-chartJsDummy :: ChartInput
-chartJsDummy = {
-    labels   : ["January", "February", "March", "April", "May", "June", "July"]
-  , datasets : [
-      { label           : "Stat1"
-      , fillColor       : show tgrey
-      , strokeColor     : show grey
-      , pointColor      : show grey
-      , pointStrokeColor: show white
-      , highlightFill   : show white
-      , highlightStroke : show grey
-      , "data"          : [65, 59, 80, 81, 56, 55, 40]
-      }
-    ]
-  }
+defaultSet = { label           : "Stat1"
+             , fillColor       : show tgrey
+             , strokeColor     : show grey
+             , pointColor      : show grey
+             , pointStrokeColor: show white
+             , highlightFill   : show white
+             , highlightStroke : show grey
+             , "data"          : [] }
+
+default :: ChartInput
+default = { labels   : []
+          , datasets : [defaultSet] }
 
 opts :: ChartOptions
-opts = chartDefaults{ responsive = true }
+opts = chartDefaults{ animation = false, responsive = true, maintainAspectRatio = false }
 
-respond elem = do 
+removeAttribute :: forall e. String -> CanvasElement -> Eff (canvas :: Canvas | e) CanvasElement
+removeAttribute = flip $ method1Eff "removeAttribute"
+
+respond elem = do
   resize go  
   go
-  where go = getWindowDimensions >>= flip setCanvasDimensions elem
-
-peek a = do
-  a' <- a 
-  Debug.Foreign.fprint a'
-  return a'
-
--- statChart :: forall a p e. Linker a (chartDataSet :: RVar StatResponse | p) 
---   (gen :: GenElem, canvas :: Canvas, resize :: Resize, reactive :: Reactive | e)
-statChart _ (Just {chartDataSet = d}) = 
-  getCanvasElementById "stage" >>= respond 
-  >>= getContext2D >>= chart Line chartJsDummy opts
-  >>= sub >>= const (return Nothing)
   where 
-  sub c = subscribe d $ \d' -> do 
-    update chartJsDummy c
+  go = do 
+    removeAttribute "style" elem
+    getWindowDimensions >>= flip setCanvasDimensions elem
+
+preflight :: StatResponse -> ChartInput
+preflight sr = let
+    sr' = take 20 $ reverse sr
+    ls {ts = ts}   = calendar $ parseUnix ts
+    ds {value = v} = v
+  in default{ labels   = ls <$> sr'
+            , datasets = [ defaultSet{ "data" = ds <$> sr' } ] }
+
+statChart :: forall a p e. Linker a (chartDataSet :: RVar StatResponse | p) 
+  (gen :: GenElem, canvas :: Canvas, resize :: Resize, reactive :: Reactive | e)
+statChart _ (Just {chartDataSet = d}) = getCanvasElementById "stage" 
+  >>= respond 
+  >>= getContext2D 
+  >>= chart Line default opts
+  >>= sub 
+  >>= const (return Nothing)
+  where 
+  sub c = subscribe d $ \d' -> do
+    update (preflight d') c
     return unit

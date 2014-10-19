@@ -48,7 +48,9 @@ type ChartOptions = { scaleShowGridLines      :: Boolean
                     , datasetStrokeWidth      :: Number
                     , datasetFill             :: Boolean
                     , legendTemplate          :: String
-                    , responsive              :: Boolean}
+                    , responsive              :: Boolean
+                    , maintainAspectRatio     :: Boolean
+                    , animation               :: Boolean }
 
 chartDefaults :: ChartOptions
 chartDefaults = { scaleShowGridLines      : true
@@ -64,7 +66,9 @@ chartDefaults = { scaleShowGridLines      : true
                 , datasetStrokeWidth      : 2
                 , datasetFill             : true
                 , legendTemplate          : "<ul class='<%=name.toLowerCase()%>-legend'><% for (var i=0; i<datasets.length; i++){%><li><span style='background-color:<%=datasets[i].lineColor%>'></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>" 
-                , responsive              : false }
+                , responsive              : false
+                , maintainAspectRatio     : true
+                , animation               : true }
 
 foreign import data Chart      :: *
 foreign import chart_ "chart_" :: 

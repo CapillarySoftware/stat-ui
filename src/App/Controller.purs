@@ -22,7 +22,7 @@ controller _ _ = do
   d <- newRVar ([] :: StatResponse)
   n <- now 
 
-  let n' = subtract (Hours 24) n 
+  let n' = subtract (Minutes 5) n 
 
   subscribeStat $ writeRVar d
   interval 1000 $ requestStat "stat8" n' n 
