@@ -31,7 +31,6 @@ foreign import emit """
     return function(d){
       return function(so){
         return function(){
-          console.log('emit', JSON.stringify(d));
           so.emit(s, JSON.stringify(d));
           return so;
         };
@@ -42,7 +41,9 @@ foreign import emit """
 
 foreign import on_ """
   function on_(so, s, f){ return function(){
-    so.on(s, function(d){ f(JSON.parse(d))(); });
+    so.on(s, function(d){ 
+      f(JSON.parse(d))(); 
+    });
   }; }
   """ :: forall a b e. F.Fn3 Socket String (a -> Eff (on :: On | e) b) (Eff (on :: On | e) Socket)
   

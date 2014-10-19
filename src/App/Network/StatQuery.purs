@@ -37,12 +37,12 @@ requestStat :: forall e. String -> Moment -> Moment -> Eff ( uuidGen :: UUIDgen
                                                            , connect :: Connect
                                                            , emit    :: Emit | e ) Socket
 requestStat n sd ed = let unix x = floor $ epoch x / 1000
-  in getUUID >>= \u -> getSocketSinglton >>= emit rawStats 
+  in getUUID >>= \u -> getSocketSinglton >>= emit "rawStatsReq" 
     ({ tracker : u, name : n, startDate : unix sd, endDate : unix ed } :: StatRequest)
 
 type OC e = Eff (on :: On, connect :: Connect | e)
 subscribeStat :: forall b e. (StatResponse -> OC e b) -> OC e Socket
-subscribeStat f = getSocketSinglton >>= on rawStats f 
+subscribeStat f = getSocketSinglton >>= on "rawStatsRes" f 
 
 
 
