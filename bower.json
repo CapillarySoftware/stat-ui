@@ -27,15 +27,21 @@
     "purescript-transformers": "~0.2.1",
     "node-uuid": "~1.4.1",
     "purescript-reactive": "*",
-    "chartjs": "~0.2.0",
     "purescript-canvas": "~0.1.5",
-    "presentable": "~0.0.0"
+    "presentable": "~0.0.0",
+    "purescript-strings": "~0.2.1",
+    "purescript-browser-sniffer": "*",
+    "purescript-moment": "*",
+    "Chart.js": "~1.0.1"
   },
   "devDependencies": {
-    "purescript-quickcheck": "~0.1.3",
     "purescript-mocha": "*",
     "purescript-chai": "*",
     "purescript-debug-foreign": "*",
     "tiny-trigger": "*"
+  },
+  "resolutions": {
+    "purescript-tuples": "~0.2.1",
+    "purescript-strings": "0.3.2"
   }
 }

@@ -1,4 +1,4 @@
-module App.Presentables.Linkers.Chart where
+module App.Presentables.Generators.Chart where
 
 import Graphics.Canvas
 import Graphics.Color 
@@ -47,16 +47,36 @@ type ChartOptions = { scaleShowGridLines      :: Boolean
                     , datasetStroke           :: Boolean
                     , datasetStrokeWidth      :: Number
                     , datasetFill             :: Boolean
-                    , legendTemplate          :: String}
+                    , legendTemplate          :: String
+                    , responsive              :: Boolean
+                    , maintainAspectRatio     :: Boolean
+                    , animation               :: Boolean }
+
+chartDefaults :: ChartOptions
+chartDefaults = { scaleShowGridLines      : true
+                , scaleGridLineColor      : "rgba(0,0,0,0.05)"
+                , scaleGridLineWidth      : 1
+                , bezierCurve             : true
+                , bezierCurveTension      : 0.4
+                , pointDot                : true
+                , pointDotRadius          : 4
+                , pointDotStrokeWidth     : 1
+                , pointHitDetectionRadius : 20
+                , datasetStroke           : true
+                , datasetStrokeWidth      : 2
+                , datasetFill             : true
+                , legendTemplate          : "<ul class='<%=name.toLowerCase()%>-legend'><% for (var i=0; i<datasets.length; i++){%><li><span style='background-color:<%=datasets[i].lineColor%>'></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>" 
+                , responsive              : false
+                , maintainAspectRatio     : true
+                , animation               : true }
 
 foreign import data Chart      :: *
-foreign import chart_ "chart_" :: Context2D -> String -> ChartInput -> Gen Chart 
+foreign import chart_ "chart_" :: 
+  forall e. Context2D -> String -> ChartInput -> ChartOptions -> Eff (gen :: GenElem | e) Chart 
 
-chart :: forall e. ChartType -> ChartInput -> Context2D -> Eff (gen :: GenElem, canvas :: Canvas | e) Chart
-chart t i c = chart_ c (show t) i
+chart :: forall e. ChartType -> ChartInput -> ChartOptions -> Context2D -> 
+  Eff (gen :: GenElem, canvas :: Canvas | e) Chart
+chart t i o c = chart_ c (show t) i o
 
-statChart :: forall a p e. Linker a (chartDataSet :: ChartInput | p) (gen :: GenElem, canvas :: Canvas | e)
-statChart _ (Just {chartDataSet = c}) = getCanvasElementById "stage" 
-                                    >>= getContext2D 
-                                    >>= chart Line c
-                                    >>= const (return Nothing)
+foreign import updateChart_ "updateChart_" :: forall e. ChartInput -> Chart -> Eff (canvas :: Canvas | e) Chart
+update = updateChart_

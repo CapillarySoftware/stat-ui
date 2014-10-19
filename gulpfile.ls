@@ -17,9 +17,10 @@ paths =
   prod:
     src: <[
       bower_components/node-uuid/uuid.js
-      bower_components/chartjs/Chart.js
+      bower_components/Chart.js/Chart.js
       bower_components/js-yaml/dist/js-yaml.js
       bower_components/socket.io-client/socket.io.js
+      bower_components/moment/moment.js
       bower_components/purescript-*/src/**/*.purs
       bower_components/purescript-*/src/**/*.purs.hs
       bower_components/presentable*/src/**/*.purs 
@@ -34,6 +35,7 @@ paths =
       bower_components/tiny-trigger/dist/tinytrigger.js
       bower_components/js-yaml/dist/js-yaml.js
       bower_components/socket.io-client/socket.io.js
+      bower_components/moment/moment.js
       bower_components/purescript-*/src/**/*.purs
       bower_components/purescript-*/src/**/*.purs.hs
       bower_components/presentable*/src/**/*.purs 
@@ -99,7 +101,9 @@ gulp.task "test:unit" ->
     action     : "run"
   )
 
-gulp.task "watch" -> gulp.watch paths.prod.src, <[build:prod]>
+gulp.task "watch" -> 
+  gulp.watch paths.prod.src, <[ build:prod ]>
+  gulp.watch <[ yaml/* ]>,   <[ build:html ]>
 
 gulp.task "serve" ->
   console.log "listening on port " + port
