@@ -12,7 +12,6 @@ import Control.Reactive
 import Debug.Trace
 
 import App.Presentables.Generators
-import App.Presentables.Foreign
 import App.Presentables.Linkers.StatChart
 import App.Presentables.Linkers.StatName
 import App.Presentables.Linkers.LastN
