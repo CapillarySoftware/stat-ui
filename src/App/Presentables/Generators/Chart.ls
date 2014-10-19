@@ -1,7 +1,10 @@
 @chart_ = (ctx, type, data, options) --> -> 
   c = new Chart(ctx)
-  c.update = (data) -> c[type](data, options)
-  c.update data
+  d = null
+  c.update = (data) -> 
+    if d then d.destroy!
+    d := c[type](data, options)
+  d = c.update data
   return c
 
 @updateChart_ = (data, chart) --> -> 
