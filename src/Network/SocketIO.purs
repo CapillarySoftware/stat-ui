@@ -26,14 +26,12 @@ foreign import getSocketSinglton """
 (>>|) :: forall a b e. (Eff e a) -> b -> Eff e b
 (>>|) f x = f >>= const (return x)
 
--- emit :: forall d e. String -> d -> Socket -> Eff (emit :: Emit | e) Socket
--- emit s d so = method2Eff "emit" so s d >>| so
-
 foreign import emit """
   function emit(s){
     return function(d){
       return function(so){
         return function(){
+          console.log('emit', JSON.stringify(d));
           so.emit(s, JSON.stringify(d));
           return so;
         };

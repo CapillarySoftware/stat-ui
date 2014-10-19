@@ -20,11 +20,9 @@ import App.Presentables.Generators.Chart
 controller _ _ = do
   r <- newRVar "moo"
   d <- newRVar ([] :: StatResponse)
-  n <- now 
-
-  let n' = subtract (Minutes 5) n 
-
+   
   subscribeStat $ writeRVar d
-  interval 1000 $ requestStat "stat8" n' n 
+  interval 1000 $ now >>= \n ->
+    requestStat "stat8" (subtract (Minutes 5) n) n 
 
   return $ Just { chart : r, chartDataSet : d }
