@@ -17,13 +17,20 @@ import App.Network.StatQuery
 import App.Presentables.Linkers.StatChart
 import App.Presentables.Generators.Chart
 
+subit r f = subscribe r \_ -> f >>= \_ -> return unit  
+
 controller _ _ = do
-  r  <- newRVar "moo"
+  sn <- newRVar "stat8"
+  ln <- newRVar 50
   sr <- newRVar ([] :: StatResponse)
 
-  subscribeStat $ writeRVar sr
+  let requestLastNStat' = join $ requestLastNStat <$> readRVar sn 
+                                                  <*> readRVar ln
 
-  interval 1000 $ now >>= \n ->
-    requestStat "stat8" (subtract (Hours 1) n) n 
+  subscribeLastNStat <<< writeRVar $ sr
 
-  return $ Just { chart : r, chartDataSet : sr }
+  interval 1000 requestLastNStat'
+  subit sn      requestLastNStat'
+  subit ln      requestLastNStat'
+
+  return $ Just {statName : sn, lastN : ln, statResponse : sr }

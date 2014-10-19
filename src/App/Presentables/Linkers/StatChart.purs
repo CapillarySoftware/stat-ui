@@ -11,7 +11,6 @@ import Presentable
 import Data.Maybe
 import Data.Moment
 import Data.Moment.Parse
-import Data.Array
 import Data.Foreign.OOFFI
 
 import App.Network.StatQuery
@@ -51,20 +50,19 @@ respond elem = do
 
 preflight :: StatResponse -> ChartInput
 preflight sr = let
-    sr' = take 100 $ reverse sr
     ls {ts = ts}   = calendar $ parseUnix ts
     ds {value = v} = v
-  in default{ labels   = ls <$> sr'
-            , datasets = [ defaultSet{ "data" = ds <$> sr' } ] }
+  in default{ labels   = ls <$> sr
+            , datasets = [ defaultSet{ "data" = ds <$> sr } ] }
 
-statChart :: forall a p e. Linker a (chartDataSet :: RVar StatResponse | p) 
+statChart :: forall a p e. Linker a (statResponse :: RVar StatResponse | p) 
   (gen :: GenElem, canvas :: Canvas, resize :: Resize, reactive :: Reactive | e)
-statChart _ (Just {chartDataSet = d}) = getCanvasElementById "stage" 
+statChart _ (Just {statResponse = sr}) = getCanvasElementById "stage" 
   >>= respond 
   >>= getContext2D 
   >>= chart Line default opts
   >>= sub >>= const (return Nothing)
   where 
-  sub c = subscribe d $ \d' -> do
-    update (preflight d') c
+  sub c = subscribe sr $ \sr' -> do
+    update (preflight sr') c
     return unit
