@@ -7,22 +7,26 @@ import App.Presentables.Generators
 
 type RE e i = Eff (reactive :: Reactive | e) i
 
-infixr 10 <<:>>
+infixr 8 <<:>>
 
-class UIBind a where
+class UIBindRight a where
   (:>>) :: forall r e. RVar r -> RE e a -> RE e a
-  (<<:) :: forall r e. RVar r -> RE e a -> RE e a
   (:>)  :: forall r e. RVar r -> RE e a -> RE e a
+
+class UIBindLeft a where
+  (<<:) :: forall r e. RVar r -> RE e a -> RE e a
   (<:)  :: forall r e. RVar r -> RE e a -> RE e a
 
-(<<:>>):: forall r e a. (UIBind a) => RVar r -> RE e a -> RE e a
+(<<:>>):: forall r e a. (UIBindRight a, UIBindLeft a) => RVar r -> RE e a -> RE e a
 (<<:>>) r a = r <<: a >>= return # (:>>) r
 
-instance inputUIBind :: UIBind Input where
+instance inputUIBindLeft :: UIBindRight Input where
   (:>>) r i = i >>= inputBindRight r
+  (:>)  r i = i >>= inputSet r
+
+instance inputUIBindRight :: UIBindLeft Input where
   (<<:) r i = i >>= inputBindLeft r
   (<:)  r i = i >>= inputGet r
-  (:>)  r i = i >>= inputSet r
 
 (>>|) :: forall a b e. Eff e a -> b -> Eff e b
 (>>|) a b = a >>= const (return b)
