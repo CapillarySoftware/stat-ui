@@ -20,18 +20,17 @@ import App.Presentables.Generators.Chart
 subit r f = subscribe r \_ -> f >>= \_ -> return unit  
 
 controller _ _ = do
-  r            <- newRVar "moo"
-  statName     <- newRVar "stat8"
-  lastN        <- newRVar 50
-  statResponse <- newRVar ([] :: StatResponse)
+  sn <- newRVar "stat8"
+  ln <- newRVar 50
+  sr <- newRVar ([] :: StatResponse)
 
-  let requestLastNStat' = join $ requestLastNStat <$> readRVar statName 
-                                                  <*> readRVar lastN
+  let requestLastNStat' = join $ requestLastNStat <$> readRVar sn 
+                                                  <*> readRVar ln
 
-  subscribeLastNStat <<< writeRVar $ statResponse
+  subscribeLastNStat <<< writeRVar $ sr
 
-  interval 1000  requestLastNStat'
-  subit statName requestLastNStat'
-  subit lastN    requestLastNStat'
+  interval 1000 requestLastNStat'
+  subit sn      requestLastNStat'
+  subit ln      requestLastNStat'
 
-  return $ Just { chart : r, chartDataSet : statResponse }
+  return $ Just {statName : sn, lastN : ln, statResponse : sr }
