@@ -38,7 +38,8 @@
     "purescript-mocha": "*",
     "purescript-chai": "*",
     "purescript-debug-foreign": "*",
-    "tiny-trigger": "*"
+    "tiny-trigger": "*",
+    "purescript-quickcheck": "~0.2.2"
   },
   "resolutions": {
     "purescript-tuples": "~0.2.1",

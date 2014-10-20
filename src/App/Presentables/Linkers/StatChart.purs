@@ -50,7 +50,7 @@ respond elem = do
 
 preflight :: StatResponse -> ChartInput
 preflight sr = let
-    ls {ts = ts}   = calendar $ parseUnix ts
+    ls {ts = ts}   = ts # parseUnix >>> calendar
     ds {value = v} = v
   in default{ labels   = ls <$> sr
             , datasets = [ defaultSet{ "data" = ds <$> sr } ] }
