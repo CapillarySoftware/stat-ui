@@ -35,8 +35,6 @@ type LastNStatRequest = { tracker :: UUID
 
 type StatResponse = [{ts :: Epoch, value :: Number}]
 
-rawStats = "rawStats"
-
 requestStat :: forall e. StatName -> Moment -> Moment -> Eff ( uuidGen :: UUIDgen
                                                              , connect :: Connect
                                                              , emit    :: Emit | e ) Socket
