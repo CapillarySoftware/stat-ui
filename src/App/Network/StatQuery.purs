@@ -33,7 +33,14 @@ type LastNStatRequest = { tracker :: UUID
                         , name    :: StatName
                         , last    :: Number }                   
 
-type StatResponse = [{ts :: Epoch, value :: Number}]
+newtype Stat = Stat {ts :: Epoch, value :: Number}
+
+type StatResponse = [Stat]
+
+instance eqStat :: Eq Stat where
+  (==) (Stat { ts = ts,  value = v  }) 
+       (Stat { ts = ts', value = v' }) = ts == ts' && v == v'
+  (/=) x y = not $ x == y
 
 requestStat :: forall e. StatName -> Moment -> Moment -> Eff ( uuidGen :: UUIDgen
                                                              , connect :: Connect

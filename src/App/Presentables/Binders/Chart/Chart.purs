@@ -7,12 +7,13 @@ import Data.Maybe
 import Presentable 
 import App.Presentables.Binders
 
-data ChartType    = Line
-                  | Bar
-                  | Radar
-                  | PolarArea
-                  | Pie 
-                  | Doughnut
+data ChartType
+  = Line
+  | Bar
+  | Radar
+  | PolarArea
+  | Pie 
+  | Doughnut
 
 instance showChartType :: Show ChartType where
   show Line      = "Line"

@@ -12,7 +12,7 @@ import Test.Chai
 import App.Presentables.Linkers.StatChart
 import App.Network.StatQuery
 
-checkPreflight ts v = let p = preflight [{ts : ts, value : v}]
+checkPreflight ts v = let p = preflight [Stat {ts : ts, value : v}]
   in case p.datasets !! 0 of 
     Just a -> a."data" == [v] && p.labels == [ts # parseUnix >>> calendar]
     _ -> false
