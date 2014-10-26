@@ -7,5 +7,4 @@
   d = c.update data
   return c
 
-@updateChart_ = (data, chart) --> -> 
-  chart.update data
+@updateChart_ = (data, chart) --> -> chart.update data

@@ -4,18 +4,21 @@ import Graphics.Canvas
 import Graphics.Color 
 import Graphics.Color.RGBA
 import Control.Monad.Eff
+import Control.Monad.Eff.Ref
 import Control.Reactive
+import Control.Reactive.EqRVar
 import Control.Reactive.Resize
 import Control.Bind
-import Presentable 
+import Control.Apply((*>))
 import Data.Maybe
 import Data.Moment
 import Data.Moment.Parse
 import Data.Foreign.OOFFI
+import Presentable 
 
 import App.Network.StatQuery
-import App.Presentables.Generators
-import App.Presentables.Generators.Chart
+import App.Presentables.Binders
+import App.Presentables.Binders.Chart
 
 grey  = RGBA 16 16 16 1
 tgrey = RGBA 220 220 220 0.2
@@ -40,29 +43,25 @@ opts = chartDefaults{ animation = false, responsive = true, maintainAspectRatio 
 removeAttribute :: forall e. String -> CanvasElement -> Eff (canvas :: Canvas | e) CanvasElement
 removeAttribute = flip $ method1Eff "removeAttribute"
 
-respond elem = do
-  resize go  
-  go
-  where 
-  go = do 
-    removeAttribute "style" elem
+respond elem = let go = removeAttribute "style" elem *> 
     getWindowDimensions >>= flip setCanvasDimensions elem
+  in resize go *> go
 
 preflight :: StatResponse -> ChartInput
 preflight sr = let
-    ls {ts = ts}   = ts # parseUnix >>> calendar
-    ds {value = v} = v
+    ls (Stat {ts = ts})   = ts # parseUnix >>> calendar
+    ds (Stat {value = v}) = v
   in default{ labels   = ls <$> sr
             , datasets = [ defaultSet{ "data" = ds <$> sr } ] }
 
 statChart :: forall a p e. Linker a (statResponse :: RVar StatResponse | p) 
-  (gen :: GenElem, canvas :: Canvas, resize :: Resize, reactive :: Reactive | e)
+  (gen :: GenElem, canvas :: Canvas, resize :: Resize, reactive :: Reactive, ref :: Ref | e)
 statChart _ (Just {statResponse = sr}) = getCanvasElementById "stage" 
   >>= respond 
   >>= getContext2D 
   >>= chart Line default opts
   >>= sub >>= const (return Nothing)
   where 
-  sub c = subscribe sr $ \sr' -> do
+  sub c = subscribeEq sr $ \sr' -> do
     update (preflight sr') c
     return unit

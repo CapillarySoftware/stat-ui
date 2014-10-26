@@ -4,7 +4,6 @@ import Control.Reactive
 import Control.Monad.Eff
 import Data.Maybe
 import Presentable
-import App.Presentables.Generators
 import App.Presentables.Binders
 import App.Presentables.Binders.Input
 
