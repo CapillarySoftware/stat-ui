@@ -15,7 +15,7 @@ import Debug.Trace
 
 import App.Network.StatQuery
 import App.Presentables.Linkers.StatChart
-import App.Presentables.Generators.Chart
+import App.Presentables.Binders.Chart
 
 subit r f = subscribe r \_ -> f >>= \_ -> return unit  
 

@@ -1,11 +1,11 @@
-module App.Presentables.Generators.Chart where
+module App.Presentables.Binders.Chart where
 
 import Graphics.Canvas
 import Graphics.Color 
 import Control.Monad.Eff
 import Data.Maybe
 import Presentable 
-import App.Presentables.Generators
+import App.Presentables.Binders
 
 data ChartType    = Line
                   | Bar

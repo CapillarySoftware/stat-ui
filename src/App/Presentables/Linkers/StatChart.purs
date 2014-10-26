@@ -14,8 +14,8 @@ import Data.Moment.Parse
 import Data.Foreign.OOFFI
 
 import App.Network.StatQuery
-import App.Presentables.Generators
-import App.Presentables.Generators.Chart
+import App.Presentables.Binders
+import App.Presentables.Binders.Chart
 
 grey  = RGBA 16 16 16 1
 tgrey = RGBA 220 220 220 0.2

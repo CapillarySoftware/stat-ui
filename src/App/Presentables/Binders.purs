@@ -3,7 +3,6 @@ module App.Presentables.Binders where
 import Data.Maybe
 import Control.Monad.Eff
 import Control.Reactive
-import App.Presentables.Generators
 
 type RE e i = Eff (reactive :: Reactive | e) i
 
@@ -22,3 +21,7 @@ class UIBindLeft a where
 
 (>>|) :: forall a b e. Eff e a -> b -> Eff e b
 (>>|) a b = a >>= const (return b)
+
+type Gen a = forall e. Eff (gen :: GenElem | e) a
+
+foreign import data GenElem  :: !
