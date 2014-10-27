@@ -3,13 +3,12 @@ module Control.Reactive.EqRVar.Test where
 import Test.Mocha
 import Test.Chai
 
-import Control.Monad.Eff
-import Control.Monad.Eff.Ref
-import Control.Monad.Eff.Random
-import Control.Apply((*>))
-import Control.Reactive
+import Control.Monad.Eff.Ref (newRef, readRef, writeRef)
+import Control.Monad.Eff.Random (random)
+import Control.Apply ((*>))
+import Control.Reactive (newRVar, writeRVar)
 import Control.Reactive.EqRVar
-import Math
+import Math(ceil)
 
 rand = random >>= (*) 1000000 >>> ceil >>> return
 

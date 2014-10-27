@@ -11,5 +11,6 @@ instance semigroupRGBA :: Semigroup RGBA where
     where avg x y = (x + y) / 2
 
 instance showRGBA :: Show RGBA where
-  show (RGBA r g b a) = "rgba(" ++ c r ++ c g ++ c b ++ show a ++ ")"
+  show (RGBA r g b a) = 
+    "rgba(" ++ c r ++ c g ++ c b ++ show a ++ ")"
     where c x = show x ++ ","
