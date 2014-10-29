@@ -6,7 +6,7 @@ data Dimension a = Dimension { width  :: a
                              , height :: a }
 
 class HasDimension a where
-  dimensions :: forall b. a -> Dimension b
+  dimensions :: a -> Dimension Number
 
 instance areaDimensions :: Area (Dimension Number) where
   area (Dimension { width = w, height = h }) = w * h

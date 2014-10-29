@@ -10,6 +10,7 @@ require! <[
   gulp-purescript 
   gulp-livescript
   gulp-filter
+  gulp-uglify
   gulp-file-include
 ]>
 
@@ -78,6 +79,7 @@ build = (k) -> ->
     .pipe gulp-if /.purs/, psc
     .pipe gulp-if /.ls/,   lsc
     .pipe gulp-concat o.output
+    .pipe gulp-if (k is "prod"), gulp-uglify()
     .pipe gulp.dest x.dest
 
 gulp.task "build:test", build "test"

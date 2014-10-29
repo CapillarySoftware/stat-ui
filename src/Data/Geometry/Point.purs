@@ -36,8 +36,8 @@ instance eqPoint :: (Eq a) => Eq (Point a) where
   (==) (Point x y) (Point x' y') = x == x' && y == y'
   (/=) x y = not $ x == y
 
-instance semigroupPoint :: (Semigroup a) => Semigroup (Point a) where
-  (<>) (Point x y) (Point x' y') = Point (x <> x') (y <> y')
+instance semigroupPoint  :: Semigroup (Point Number) where
+  (<>) (Point x y) (Point x' y') = Point (x + x' / 2) (y + y' / 2)
 
 dist :: Point Number -> Point Number -> Number
 dist p q = sqrt $ l22dist p q
@@ -46,4 +46,5 @@ l22dist :: Point Number -> Point Number -> Number
 l22dist p q = let a = q |-| p in (getX a)^2 + (getY a)^2
 
 distance :: Point Number -> Point Number -> Number
-distance (Point x y) (Point x' y') = sqrt $ abs (x - x')^2 + abs (y - y')^2
+distance (Point x y) (Point x' y') = 
+  let f a b = abs (a - b)^2 in sqrt $ f x x' + f y y'

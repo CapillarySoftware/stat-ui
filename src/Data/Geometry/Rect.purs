@@ -20,7 +20,12 @@ instance eqRect :: (Eq a) => Eq (Rect a) where
   (/=) x y = not $ x == y
 
 instance areaRect :: Area (Rect Number) where 
-  area (Rect (Point x y) (Point x' y')) = abs (x - x') * abs (y - y')
+  area (Rect (Point x y) (Point x' y')) = 
+    let f a b = abs (a - b) in f x x' * f y y'
+
+instance perimeterRect :: Perimeter (Rect Number) where
+  perimeter (Rect (Point x y) (Point x' y')) = 
+    let f a b = abs (a - b) * 2 in f x x' + f y y'
 
 getTopLeft     (Rect (Point x y) (Point x' y')) = Point (x `min` x') (y `min` y')
 getTopRight    (Rect (Point x y) (Point x' y')) = Point (x `max` x') (y `min` y')

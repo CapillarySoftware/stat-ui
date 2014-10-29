@@ -17,4 +17,10 @@ instance eqCircle :: (Eq a) => Eq (Circle a) where
   (/=) x y = not $ x == y
 
 instance areaCircle :: Area (Circle Number) where
-  area (Circle p r) = pi * r^2
+  area (Circle _ r) = pi * r^2
+
+instance perimeterCircle :: Perimeter (Circle Number) where
+  perimeter (Circle _ r) = pi * r * 2
+
+circumference :: Circle Number -> Number
+circumference = perimeter

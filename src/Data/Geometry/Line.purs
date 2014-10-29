@@ -1,12 +1,13 @@
 module Data.Geometry.Line where
 
+import Data.Geometry
 import Data.Geometry.Point
 import Data.Geometry.Dimension
 
 data Line a = Line (Point a) (Point a)
 
--- instance hasDimension :: HasDimension (Line Number) where
---   dimensions (Line a b) = Dimension { width : 0, height : (distance a b) }
+instance hasDimension :: HasDimension (Line Number) where
+  dimensions l = Dimension { width : 0, height : (perimeter l) }
 
 instance showLine :: (Show a) => Show (Line a) where
   show (Line a b) = "Line (" ++ show a ++ ") (" ++ show b ++ ")"
@@ -20,3 +21,6 @@ instance hasPointsLine :: HasPoints Line where
 instance eqLine :: (Eq a) => Eq (Line a) where
   (==) (Line a b) (Line a' b') = a == a' && b == b'
   (/=) x y = not $ x == y
+
+instance perimeterLine :: Perimeter (Line Number) where
+  perimeter (Line a b) = distance a b
