@@ -5,8 +5,8 @@ import Data.Geometry.Dimension
 
 data Line a = Line (Point a) (Point a)
 
-instance hasDimension :: HasDimension (Line Number) where
-  dimensions (Line a b) = Dimension { width : 0, height : (distance a b) }
+-- instance hasDimension :: HasDimension (Line Number) where
+--   dimensions (Line a b) = Dimension { width : 0, height : (distance a b) }
 
 instance showLine :: (Show a) => Show (Line a) where
   show (Line a b) = "Line (" ++ show a ++ ") (" ++ show b ++ ")"

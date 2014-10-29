@@ -48,6 +48,7 @@ options =
   prod:
     output: "App.js"
     main: true
+    modules: <[Main Control.Reactive]>
 
   test:
     output: "Test.js"
