@@ -1,9 +1,12 @@
-module Data.Geometry.Dimensions where
+module Data.Geometry.Dimension where
 
 import Data.Geometry
 
 data Dimension a = Dimension { width  :: a
                              , height :: a }
+
+class HasDimension a where
+  dimensions :: forall b. a -> Dimension b
 
 instance areaDimensions :: Area (Dimension Number) where
   area (Dimension { width = w, height = h }) = w * h

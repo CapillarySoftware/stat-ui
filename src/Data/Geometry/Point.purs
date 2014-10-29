@@ -44,3 +44,6 @@ dist p q = sqrt $ l22dist p q
 
 l22dist :: Point Number -> Point Number -> Number
 l22dist p q = let a = q |-| p in (getX a)^2 + (getY a)^2
+
+distance :: Point Number -> Point Number -> Number
+distance (Point x y) (Point x' y') = sqrt $ abs (x - x')^2 + abs (y - y')^2
