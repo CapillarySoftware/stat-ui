@@ -32,7 +32,8 @@
     "purescript-strings": "~0.2.1",
     "purescript-browser-sniffer": "*",
     "purescript-moment": "*",
-    "Chart.js": "~1.0.1"
+    "Chart.js": "~1.0.1",
+    "purescript-geometry": "~0.0.0"
   },
   "devDependencies": {
     "purescript-mocha": "*",
