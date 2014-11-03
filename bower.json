@@ -32,7 +32,8 @@
     "purescript-strings": "~0.2.1",
     "purescript-browser-sniffer": "*",
     "purescript-moment": "*",
-    "Chart.js": "~1.0.1"
+    "Chart.js": "~1.0.1",
+    "purescript-geometry": "~0.0.2"
   },
   "devDependencies": {
     "purescript-mocha": "*",
@@ -43,6 +44,6 @@
   },
   "resolutions": {
     "purescript-tuples": "~0.2.1",
-    "purescript-strings": "0.3.2"
+    "purescript-strings": "~0.4.0"
   }
 }
